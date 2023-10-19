@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #list{
+            background-color: rgb(228, 228, 228);
+            width: 40%;
+            padding: 50px 10px;
+            margin: auto;
+            color: rgb(61, 60, 60);
+            text-align: center;
+            margin-top: 20px;
+            font-size: 40px;
+            
+        }
+        body{
+            background-color: rgb(243, 241, 238);
+        }
+            .buttons-full{
+                display: flex;
+                justify-content: center;
+             
+
+            } 
+            button{
+                padding: 20px 50px;
+                background-color: rgb(189, 234, 234);
+                margin-top: 70px;
+                font-size: 20px;
+                cursor: pointer;
+                color: rgb(40, 41, 42);
+                margin-left: 20px;
+                border-radius: 30px;
+                border: none;
+            }
+            button:hover{
+                background-color: rgb(20, 21, 21);
+                color: rgb(240, 233, 233);
+            }
+           input{
+             margin-left: 43%;
+             padding: 10px;
+           }
+           #task{
+            background-color: white;
+           }
+    </style>
+</head>
+<body>
+
+
+
+
+    <input type="text" placeholder="Enter any task" onchange="addTask()" id="task">
+   
+    <div id ="list">
+       
+      
+        <div>
+
+
+
+        </div> 
+       
+
+    </div>
+    <script>
+        async function getTodo(){
+            const task=await fetch("http://localhost:3007/api/gettask");
+            const data=await task.json();
+            console.log(data);
+            s=""
+            data.map(dt=>{
+                s+=`  <div class="items">
+            <div class="details">
+                ${dt.task}
+            </div>
+            <div class="buttons-full">
+                <div><button>edit</button></div>
+                <div><button>delete</button></div>
+            </div>
+        </div>`
+            })
+            document.getElementById("list").innerHTML=s
+        }
+        getTodo()
+
+
+
+
+
+
+        let data=document.getElementById("task")
+
+
+        function addTask(){
+            let task=data.value;
+            console.log(data);
+            fetch("http://localhost:3007/api/addtask",{
+                method:"POST",
+                headers:{"Content-type":"application/json"},
+                body:JSON.stringify({task})
+            }).then(()=>{
+                alert("task added")
+
+            }).catch("error")
+            getTodo();
+            task.value=""
+        }
+
+    </script>
+</body>
+</html>
